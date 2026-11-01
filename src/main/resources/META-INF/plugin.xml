@@ -1,0 +1,21 @@
+<idea-plugin>
+    <id>edu.groupb.course-ta</id>
+    <name>Course TA</name>
+    <vendor>Group B</vendor>
+    <description><![CDATA[Course-specific Java teaching assistant with local RAG, citations, scenario-based JUnit generation and staged Git commit messages. Creative action deferred.]]></description>
+    <depends>com.intellij.modules.platform</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Course TA" anchor="right" factoryClass="edu.groupb.courseta.ide.TaToolWindowFactory" icon="/icons/courseTa.svg"/>
+    </extensions>
+    <actions>
+        <action id="CourseTA.GenerateJUnit" class="edu.groupb.courseta.ide.GenerateJUnitAction" text="Generate JUnit Tests with Course TA" description="Describe a scenario and generate JUnit 5 tests for the selected Java code">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+        <action id="CourseTA.GenerateCommit" class="edu.groupb.courseta.ide.GenerateCommitAction" text="Generate Commit Message with Course TA" description="Generate a Conventional Commit message for all staged changes">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+        <action id="CourseTA.AskSelectedCode" class="edu.groupb.courseta.ide.AskSelectedCodeAction" text="Ask Course TA About Selected Code" description="Ask the course teaching assistant about the selected code">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

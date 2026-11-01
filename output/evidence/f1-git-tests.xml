@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="edu.groupb.courseta.core.GitStagedChangesTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-01T08:08:03.458Z" hostname="SURFACE-LAPTOP7" time="8.89">
+  <properties/>
+  <testcase name="nonRepositoryIsRejected()" classname="edu.groupb.courseta.core.GitStagedChangesTest" time="0.143"/>
+  <testcase name="includesDeletionRenameAndBinaryChanges()" classname="edu.groupb.courseta.core.GitStagedChangesTest" time="1.905"/>
+  <testcase name="noStagedChangesHasActionableError()" classname="edu.groupb.courseta.core.GitStagedChangesTest" time="1.756"/>
+  <testcase name="missingGitExplainsInstallationRequirement()" classname="edu.groupb.courseta.core.GitStagedChangesTest" time="0.664"/>
+  <testcase name="collectsAllStagedFilesFromNestedDirectoryButExcludesUnstagedAndUntrackedText()" classname="edu.groupb.courseta.core.GitStagedChangesTest" time="2.07"/>
+  <testcase name="oversizedDiffFailsInsteadOfReturningPartialChanges()" classname="edu.groupb.courseta.core.GitStagedChangesTest" time="1.186"/>
+  <testcase name="supportsInitialCommitWithoutHead()" classname="edu.groupb.courseta.core.GitStagedChangesTest" time="1.159"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

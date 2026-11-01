@@ -1,0 +1,133 @@
+{
+  "pdfPages": 115,
+  "warnings": [],
+  "chunks": 115,
+  "filesRead": 5,
+  "importAndIndexMillis": 1675,
+  "sha256": {
+    "0.pdf": "a4e25aa51a1bbcbbaf0b634b63ce466eba2291fe8d563d7d4c291d77add519ff",
+    "1.pdf": "8a172bb1d600e4ccfc34d6a83c22ce07b5ff3c2c451f9f5cd40d2e871091f7c1",
+    "2.pdf": "3fc2c08ec40fd5c5c89becd14c0f3fa30286a53870cf02d3a87fb8114994cd25",
+    "3.pdf": "caad773a8f9d8ad356bd9b4d33f5a887398536cdf76da06d52bb8c6be6c0c292",
+    "Lec-4-AI-Assisted-Java-Development.pdf": "1f96fde6d341f2598c06ce58ff90421eb508b2e37ce357457092aef36da1ea27"
+  },
+  "queries": [
+    {
+      "hits": [
+        {
+          "chunk": {
+            "document": "2.pdf",
+            "location": "p. 22",
+            "text": "Overriding and Hiding Methods\r\n• Instance methods\r\n– The same signature and return type\r\n– An overriding method can also return a subtype: called a covariant return type\r\n• Static methods\r\n– The same signature\r\n• Distinction between hiding a static method and overriding an instance method\r\n– An example: Animal, Cat\r\n• Modifiers\r\n– The access specifier for an overriding method can allow more, but not less, access \r\nthan the overridden method\r\n• Polymorphism\r\n– Virtual method invocation\r\n22"
+          },
+          "score": 4.0439080831987155
+        }
+      ],
+      "question": "What is polymorphism?"
+    },
+    {
+      "hits": [
+        {
+          "chunk": {
+            "document": "3.pdf",
+            "location": "p. 6",
+            "text": "Catching and Handling Exceptions\r\n• An example: writing a list of numbers into a text file\r\n– A checked exception and an unchecked exception\r\n• The try block\r\n• The catch blocks\r\n– The argument type must be the name of a class that inherits from the \r\nThrowable class\r\n– The runtime system invokes the exception handler when the handler is \r\nthe first one in the call stack whose ExceptionType matches the type of \r\nthe exception thrown\r\n– A single catch block can handle more than one type of exception\r\n• The finally block\r\n6"
+          },
+          "score": 6.643549295384098
+        },
+        {
+          "chunk": {
+            "document": "3.pdf",
+            "location": "p. 5",
+            "text": "Three Categories of Exceptions\r\n• Checked exception: exceptional conditions that a well-written \r\napplication should anticipate and recover from\r\n– Example: java.io.FileNotFoundException\r\n– Subject to the Catch or Specify Requirement\r\n• Error: exceptional conditions that are external to the application, \r\nand that the application usually cannot anticipate or recover from\r\n– Example: java.io.IOError\r\n• Runtime exception: exceptional conditions that are internal to \r\nthe application, and that the application usually cannot anticipate \r\nor recover from\r\n– Example: NullPointerException\r\n• Errors and runtime exceptions are known as unchecked exceptions\r\n5"
+          },
+          "score": 6.569111016330643
+        },
+        {
+          "chunk": {
+            "document": "3.pdf",
+            "location": "p. 4",
+            "text": "The Catch or Specify Requirement\r\n• Code that might throw certain exceptions must be enclosed by \r\neither of the following\r\n– A try statement that catches the exception\r\n• Providing a handler for the exception\r\n– A method that specifies that it can throw the exception\r\n• Providing a throws clause that lists the exception\r\n• Not all exceptions are subject to the Catch or Specify \r\nRequirement\r\n4"
+          },
+          "score": 3.263436305884363
+        },
+        {
+          "chunk": {
+            "document": "3.pdf",
+            "location": "p. 10",
+            "text": "Creating Exception Classes\r\n• Do you need an exception type that isn’t represented by those \r\nin the Java platform?\r\n• Would it help users if they could differentiate your exceptions \r\nfrom those thrown by classes written by other vendors?\r\n• Does your code throw more than one related exception?\r\n• If you use someone else’s exceptions, will users have access \r\nto those exceptions? A similar question is, should your \r\npackage be independent and self-contained?\r\n10"
+          },
+          "score": 3.1874425476224006
+        }
+      ],
+      "question": "How do checked exceptions work?"
+    },
+    {
+      "hits": [
+        {
+          "chunk": {
+            "document": "0.pdf",
+            "location": "p. 3",
+            "text": "Programs\r\nWeek Date Program\r\n1 16 Sep 2026 Course Introduction; Java Fundamentals\r\n2 23 Sep 2026 OOP with Java: Classes and Objects, Inheritance and Interfaces\r\n3 30 Sep 2026 Java Core Advanced Features: Exceptions, Generics, Collections, Modern Syntax, Annotations, Reflection; Unit Testing\r\n4 7 Oct 2026 AI-Assisted Java Development: Requirements and Design, Implementation and Debugging, Testing and Review\r\n5 14 Oct 2026 AI-Powered Java Applications: LLM Integration, Retrieval-Augmented Generation, Agent Development\r\n6 21 Oct 2026 Programming Examination\r\n7 28 Oct 2026 Assignment A Presentation (I)\r\n8 4 Nov 2026 Assignment A Presentation (II)\r\n9 11 Nov 2026 Assignment A Presentation (III)\r\n10 18 Nov 2026 Servlet Programming: Core Servlet Mechanisms, MVC Architecture and View Evolution, Session State Management\r\n11 25 Nov 2026 Spring: IoC Container and Dependency Injection, Spring Boot, Spring Web MVC, Aspect-Oriented Programming\r\n12 2 Dec 2026 Data Persistence: JDBC, MyBatis, JPA and Hibernate, Spring Data\r\n13 9 Dec 2026 JMS and JTA: Asynchronous Messaging and Distributed Transaction Coordination\r\n14 16 Dec 2026 Assignment B Presentation (I)\r\n15 23 Dec 2026 Assignment B Presentation (II)\r\n16 30 Dec 2026 Assignment B Presentation (III) 3"
+          },
+          "score": 6.442066681034332
+        }
+      ],
+      "question": "What is retrieval augmented generation?"
+    },
+    {
+      "hits": [
+        {
+          "chunk": {
+            "document": "2.pdf",
+            "location": "p. 23",
+            "text": "Using the Keyword “super”\r\n• Accessing superclass members\r\n– Invoke the overridden method\r\n– Refer to a hidden field\r\n• Subclass constructors\r\n– Invocation of a superclass constructor must be the first line in the \r\nsubclass constructor\r\n– Constructor chaining\r\n23"
+          },
+          "score": 3.9421571215425413
+        },
+        {
+          "chunk": {
+            "document": "2.pdf",
+            "location": "p. 6",
+            "text": "Constructors\r\n• Constructor declaration public class Account {\r\nprivate String name;\r\n• Default constructor private float balance;\r\npublic Account() {\r\n• Constructor overloading name = \"default\";\r\nbalance = 100;\r\n}\r\n• Constructor chaining\r\npublic Account(String name) {\r\n• Private constructor this.name = name;\r\nbalance = 100;\r\n}\r\n• How about destructors? public Account(String name, float balance) {\r\nthis.name = name;\r\nthis.balance = balance;\r\n}\r\n}\r\n6"
+          },
+          "score": 3.9214504020791074
+        },
+        {
+          "chunk": {
+            "document": "2.pdf",
+            "location": "p. 12",
+            "text": "Practice 1\r\n• Design and implement a Point class\r\n– Fields (private): xPos, yPos\r\n– A set of constructors, including a default constructor\r\n– Getters and setters for xPos and yPos\r\n• Design and implement a Circle class\r\n– Fields (private): radius, center (represented as Point)\r\n– A set of constructors, including a default constructor\r\n– Getters and setters for radius and center\r\n– getArea: compute and return the area of the circle\r\n– toString: return the information of the circle\r\n• Design and implement three static methods\r\n– Circle[] generate(int amount, float maxRadius, Point upperLeft, Point lowerRight)\r\n– Circle max(Circle... circles)\r\n– void sort(Circle[] circles)\r\n12"
+          },
+          "score": 3.23774352321158
+        },
+        {
+          "chunk": {
+            "document": "2.pdf",
+            "location": "p. 31",
+            "text": "Anonymous Classes\r\n• Anonymous classes make code more concise\r\n– Declare and instantiate a class at the same time\r\n– They do not have a name: use them if you need to use a local class \r\nonly once\r\n• The anonymous class expression consists of\r\n– The new operator\r\n– The name of an interface/class to implement/extend\r\n– Parentheses that contain the arguments to a constructor\r\n– The class declaration body\r\n• You cannot declare constructors in an anonymous class\r\n31"
+          },
+          "score": 2.8836542197234465
+        }
+      ],
+      "question": "Explain constructors"
+    },
+    {
+      "hits": [
+        {
+          "chunk": {
+            "document": "2.pdf",
+            "location": "p. 22",
+            "text": "Overriding and Hiding Methods\r\n• Instance methods\r\n– The same signature and return type\r\n– An overriding method can also return a subtype: called a covariant return type\r\n• Static methods\r\n– The same signature\r\n• Distinction between hiding a static method and overriding an instance method\r\n– An example: Animal, Cat\r\n• Modifiers\r\n– The access specifier for an overriding method can allow more, but not less, access \r\nthan the overridden method\r\n• Polymorphism\r\n– Virtual method invocation\r\n22"
+          },
+          "score": 4.0439080831987155
+        }
+      ],
+      "question": "什么是多态"
+    },
+    {
+      "hits": [],
+      "question": "astronomy galaxy telescope"
+    }
+  ]
+}

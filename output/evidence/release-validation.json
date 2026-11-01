@@ -1,0 +1,19 @@
+{
+  "release": "0.2.0",
+  "scope": "F0 + F1 JUnit and staged commit actions; creative action deferred by user",
+  "date": "2026-11-01",
+  "ideTarget": "IntelliJ IDEA 2026.1.1 / 261.*",
+  "buildPlugin": "passed",
+  "coreTests": 38,
+  "testFailures": 0,
+  "reportPages": 10,
+  "presentationSlides": 9,
+  "idePluginDiscovery": "0.1.0 previously discovered in sandbox; not re-run for 0.2.0",
+  "interactiveIdeTest": "not run; Computer Use native pipe unavailable (os error 2)",
+  "f1Validation": "10 prompt/output/local HTTP tests and 7 tests with real temporary Git repositories passed",
+  "documentBaseline": "PDF report and slides describe F0 0.1.0; see F0_0.1.1_Changes.md and F1_Implementation_Guide.md for updates",
+  "liveLlmTest": "not run; no real provider credential supplied",
+  "gradleConfigurationAdvisory": "until-build intentionally restricts this release to the target 261.* series",
+  "uiSamples": "production Swing component rendered offscreen",
+  "slidePdf": "reviewed raster slide renders; editable source in PPTX"
+}

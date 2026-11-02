@@ -2,6 +2,8 @@ package edu.groupb.courseta.ide;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileChooser.*;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.ide.CopyPasteManager;
@@ -19,16 +21,20 @@ import java.nio.file.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
-/** Review and export F1 results without automatically modifying code or Git state. */
+/** Review F1 drafts; comment insertions can be applied explicitly as an undoable edit. */
 public final class SmartActionPanel implements Disposable {
     private final Project project;
-    private final JPanel root = new JPanel(new BorderLayout(8, 8));
+    private final JPanel root = new JPanel(new BorderLayout(4, 4));
     private final JTextField repository = new JTextField();
     private final JTextArea context = area(false), result = area(true);
     private final JLabel status = new JLabel("Use Course Q&A > Settings to configure the model.");
-    private final JButton tests = new JButton("JUnit from selection"), commit = new JButton("Generate commit message");
-    private final JButton preview = new JButton("Preview staged diff"), browse = new JButton("Choose repository");
-    private final JButton copy = new JButton("Copy result"), save = new JButton("Save test as..."), cancel = new JButton("Cancel");
+    private final JButton tests = UiStyle.button("JUnit from selection", UiStyle.Tone.PRIMARY), commit = UiStyle.button("Generate commit message", UiStyle.Tone.PRIMARY);
+    private final JButton preview = UiStyle.button("Preview staged diff", UiStyle.Tone.NEUTRAL), browse = UiStyle.button("Choose repository", UiStyle.Tone.NEUTRAL);
+    private final JButton copy = UiStyle.button("Copy result", UiStyle.Tone.NEUTRAL), save = UiStyle.button("Save test as...", UiStyle.Tone.NEUTRAL), cancel = UiStyle.button("Cancel", UiStyle.Tone.NEUTRAL);
+    private final JButton comments = UiStyle.button("Comments from selection", UiStyle.Tone.PRIMARY), apply = UiStyle.button("Apply comments", UiStyle.Tone.SUCCESS);
+    private CommentGenerator.Draft commentDraft;
+    private Document commentDocument;
+    private VirtualFile commentFile;
     private Future<?> running;
     private boolean busy, disposed, testResult;
     private long generation;
@@ -37,28 +43,47 @@ public final class SmartActionPanel implements Disposable {
     public SmartActionPanel(Project project) {
         this.project = project;
         Disposer.register(project, this);
-        root.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+        root.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         repository.setText(project.getBasePath());
         repository.setToolTipText("Directory inside the repository. All staged changes in that repository are used.");
-        JPanel top = new JPanel(new GridLayout(0, 1, 4, 4));
-        top.add(new JLabel("F1: JUnit tests and Git commit messages"));
-        top.add(new JLabel("Git repository directory")); top.add(repository);
+        // Each header row uses its own preferred height; the three-row button
+        // group must not determine the height of labels or the repository field.
+        JPanel top = new JPanel(new GridBagLayout());
+        GridBagConstraints row = new GridBagConstraints();
+        row.gridx = 0; row.gridy = GridBagConstraints.RELATIVE;
+        row.weightx = 1; row.fill = GridBagConstraints.HORIZONTAL;
+        row.insets = new Insets(0, 0, 3, 0);
+        JLabel heading = new JLabel("Smart actions");
+        heading.setFont(heading.getFont().deriveFont(Font.BOLD, 18f));
+        top.add(heading, row);
+        top.add(new JLabel("Git repository directory"), row); top.add(repository, row);
         JPanel actions = new JPanel(new GridLayout(0, 2, 4, 4));
-        actions.add(tests); actions.add(commit); actions.add(browse); actions.add(preview);
-        top.add(actions); top.add(status); root.add(top, BorderLayout.NORTH);
+        actions.add(tests); actions.add(commit); actions.add(browse); actions.add(preview); actions.add(comments);
+        top.add(actions, row); top.add(status, row); root.add(top, BorderLayout.NORTH);
         context.setText("JUnit: select a Java class or method, then describe a test scenario.\n"
-            + "Commit: stage your changes in Git, then preview or generate a message.\n\n"
+            + "Commit: stage your changes in Git, then preview or generate a message.\n"
+            + "Comments: select Java code, generate a draft, then copy or apply the comments.\n\n"
             + "Generate sends the selected Java code plus its current file, or the complete staged diff, to your configured model.");
+        context.setPreferredSize(new Dimension(640, 280));
+        result.setPreferredSize(new Dimension(640, 360));
         JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, framed("Input context", context), framed("Generated draft - review before use", result));
-        split.setResizeWeight(0.4); root.add(split, BorderLayout.CENTER);
-        JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        bottom.add(copy); bottom.add(save); bottom.add(cancel); root.add(bottom, BorderLayout.SOUTH);
+        split.setResizeWeight(0.4); split.setContinuousLayout(true);
+        split.setBorder(BorderFactory.createEmptyBorder()); split.setDividerSize(8);
+        root.add(split, BorderLayout.CENTER);
+        JPanel bottom = new JPanel(new GridLayout(0, 2, 4, 4));
+        bottom.add(copy); bottom.add(save); bottom.add(apply); bottom.add(cancel); root.add(bottom, BorderLayout.SOUTH);
         tests.addActionListener(e -> {
             var editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
             var file = editor == null ? null : FileDocumentManager.getInstance().getFile(editor.getDocument());
             GenerateJUnitAction.request(project, editor, file);
         });
         commit.addActionListener(e -> git(false)); preview.addActionListener(e -> git(true));
+        comments.addActionListener(e -> {
+            var editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+            var file = editor == null ? null : FileDocumentManager.getInstance().getFile(editor.getDocument());
+            GenerateCommentsAction.request(project, editor, file);
+        });
+        apply.addActionListener(e -> applyComments());
         browse.addActionListener(e -> {
             var folder = FileChooser.chooseFile(FileChooserDescriptorFactory.createSingleFolderDescriptor(), project, null);
             if (folder != null) repository.setText(folder.getPath());
@@ -102,7 +127,7 @@ public final class SmartActionPanel implements Disposable {
         String requirement = scenario.getText().strip();
         String input = "Scenario: " + requirement + "\n\n" + code.file() + " lines " + code.startLine() + "-" + code.endLine()
             + "\n" + code.selectedCode() + "\n\nCurrent file context:\n" + code.sourceCode();
-        context.setText(input); result.setText(""); testResult = false;
+        clearComments(); context.setText(input); result.setText(""); testResult = false;
         background(() -> new Result(input, new SmartActions().generateTests(code, requirement, config()),
             "JUnit draft generated. Review dependencies and run it in your project.", true), this::display);
     }
@@ -110,7 +135,7 @@ public final class SmartActionPanel implements Disposable {
     public void generateCommit() { if (!busy) git(false); }
     private void git(boolean previewOnly) {
         String folder = repository.getText().strip();
-        context.setText(""); result.setText(""); testResult = false;
+        clearComments(); context.setText(""); result.setText(""); testResult = false;
         background(() -> {
             if (folder.isBlank()) throw new IllegalArgumentException("Choose a Git repository directory first.");
             var snapshot = new GitStagedChanges().read(Path.of(folder));
@@ -124,6 +149,50 @@ public final class SmartActionPanel implements Disposable {
         var service = project.getService(TaProjectService.class); var s = service.settings();
         return new LlmClient.Config(s.endpoint, s.model, service.apiKey());
     }
+    public void requestComments(CommentGenerator.Selection selection, Document document, VirtualFile file) {
+        if (busy) { Messages.showInfoMessage(project, "Wait for the current F1 action or cancel it first.", "Course TA"); return; }
+        JComboBox<String> language = new JComboBox<>(new String[]{"Chinese", "English"});
+        JPanel fields = new JPanel(new GridLayout(0, 1, 4, 4));
+        fields.add(new JLabel("Comment language")); fields.add(language);
+        fields.add(new JLabel("Complete selected lines and the current Java file are sent to the model."));
+        fields.add(new JLabel("Review the draft, then copy it or click Apply comments. Undo is supported."));
+        DialogWrapper dialog = new DialogWrapper(project) {
+            { setTitle("Generate Comments - " + selection.file()); setOKButtonText("Generate"); init(); }
+            protected JComponent createCenterPanel() { return fields; }
+            protected ValidationInfo doValidate() {
+                try { new CommentGenerator().prompt(selection, (String) language.getSelectedItem()); return null; }
+                catch (IllegalArgumentException ex) { return new ValidationInfo(ex.getMessage()); }
+            }
+        };
+        if (!dialog.showAndGet()) return;
+        String selectedLanguage = (String) language.getSelectedItem();
+        String input = selection.file() + " | " + selectedLanguage + " comments\nComplete selected lines:\n" + selection.code();
+        clearComments(); context.setText(input); result.setText(""); testResult = false;
+        background(() -> new CommentGenerator().generate(selection, selectedLanguage, config()), draft -> {
+            commentDraft = draft; commentDocument = document; commentFile = file;
+            display(new Result(input, draft.replacement(), draft.commentCount() + " comments generated. Review, then copy or apply.", false));
+        });
+    }
+    private void applyComments() {
+        if (busy || commentDraft == null || commentDocument == null) return;
+        try {
+            if (commentFile == null || !commentFile.isValid()) throw new IllegalStateException("The source file is no longer available.");
+            // Check before asking for write access, then again atomically inside the write command.
+            commentDraft.applyTo(commentDocument.getText());
+            if (!FileDocumentManager.getInstance().requestWriting(commentDocument, project)) return;
+            var draft = commentDraft; var document = commentDocument; var file = commentFile;
+            WriteCommandAction.runWriteCommandAction(project, "Apply Course TA Comments", null, () -> {
+                draft.applyTo(document.getText());
+                document.replaceString(draft.selection().start(), draft.selection().end(), draft.replacement());
+            });
+            clearComments(); setBusy(false);
+            status.setText("Comments applied. Use Undo in the source editor to revert.");
+            FileEditorManager.getInstance(project).openFile(file, true);
+        } catch (RuntimeException ex) {
+            Messages.showInfoMessage(project, ex.getMessage() == null ? "Could not apply comments." : ex.getMessage(), "Course TA Comments");
+        }
+    }
+    private void clearComments() { commentDraft = null; commentDocument = null; commentFile = null; apply.setEnabled(false); }
     private void display(Result value) {
         context.setText(value.input()); context.setCaretPosition(0);
         result.setText(value.output()); result.setCaretPosition(0);
@@ -171,17 +240,18 @@ public final class SmartActionPanel implements Disposable {
         });
     }
     private void setBusy(boolean value) {
-        busy = value; for (JButton button : new JButton[]{tests, commit, preview, browse}) button.setEnabled(!value);
-        repository.setEnabled(!value); result.setEditable(!value); cancel.setEnabled(value);
+        busy = value; for (JButton button : new JButton[]{tests, commit, preview, browse, comments}) button.setEnabled(!value);
+        repository.setEnabled(!value); result.setEditable(!value && commentDraft == null); cancel.setEnabled(value);
+        apply.setEnabled(!value && commentDraft != null);
         copy.setEnabled(!value && !result.getText().isBlank()); save.setEnabled(!value && testResult);
     }
     private static JTextArea area(boolean editable) {
         JTextArea text = new JTextArea(); text.setEditable(editable); text.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
+        text.setMargin(new Insets(10, 12, 10, 12));
         return text;
     }
     private static JPanel framed(String title, JTextArea text) {
-        JPanel panel = new JPanel(new BorderLayout()); panel.setBorder(BorderFactory.createTitledBorder(title));
-        panel.add(new JScrollPane(text), BorderLayout.CENTER); return panel;
+        return UiStyle.section(title, text);
     }
-    public void dispose() { disposed = true; if (running != null) running.cancel(true); }
+    public void dispose() { disposed = true; if (running != null) running.cancel(true); clearComments(); }
 }

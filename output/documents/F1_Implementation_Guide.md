@@ -1,6 +1,6 @@
-# Group B F1 implementation - release 0.2.0
+# Group B F1 implementation - release 0.3.0
 
-This release adds the first two F1 actions to the existing F0 plugin. The creative action is deliberately not implemented, as requested. Names, matriculation numbers and contact details remain for the group to fill in. This is a partial F1 milestone, not the final complete Group B submission.
+This release implements all three F1 actions on top of F0. The team's creative action is automatic comment generation for selected Java code. Names, matriculation numbers and contact details remain for the group to fill in. The 17-slide GroupB_F0_F1_Presentation.pptx and matching PDF cover F0 and all F1 actions; the separate PDF report still needs to be updated from its F0 baseline before submission.
 
 ## 1. Scenario-based JUnit generation
 
@@ -26,21 +26,37 @@ Collection resolves the repository root, then executes `git diff --cached --no-e
 
 The plugin never stages, commits, pushes, or changes Git configuration. Git must be on the IDE's PATH. Multiple repositories are handled one at a time by selecting the intended repository.
 
-## 3. Architecture
+## 3. Creative action: selected-code comments
+
+1. Select a method, class or code segment in a Java editor. Right-click **Generate Comments with Course TA** or click **Comments from selection** in F1 Actions.
+2. Choose Chinese (the default) or English, then Generate. The covered physical lines and the full current Java document, including unsaved edits, are sent to the configured model.
+3. Review the commented code in the result pane. The preview is read-only to retain the validated insertion plan. **Copy result** copies the annotated selection, not the entire file.
+4. Click **Apply comments** to replace the original covered lines with their commented version. All original characters within and outside those lines are retained; only comment blocks are inserted.
+5. Use Undo in the source editor to revert the named `Apply Course TA Comments` write command. If any part of the source changed after generation, the plugin refuses to apply the stale draft and asks you to regenerate.
+
+The model returns JSON such as `{"comments":[{"line":1,"kind":"javadoc","text":"Returns twice the input.\n@param n input value\n@return twice n"}]}`. Line numbers are relative to the selection. Allowed kinds are `javadoc` and `block`; the plugin supplies delimiters and indentation. Existing code is never taken from the model response.
+
+Validation accepts at most 40 unique insertion locations and 1,500 characters per comment. A scan of the complete document tracks code, line/block comments, strings, characters and text blocks. Insertions are allowed only at code-state line starts; blank lines and existing comment-start lines are rejected. Comment terminators, Java Unicode escapes and invalid control characters are rejected. Files that already contain Java Unicode escape sequences are conservatively unsupported by this action; ordinary Chinese text is supported. The IDE supplies normalized LF document text. Invalid JSON, rewritten-code output and out-of-range locations are rejected without changing the source.
+
+The model is asked to explain purpose, parameters, return values, exceptions and non-obvious logic. These descriptions still require human review; insertion validation does not prove that the natural-language explanation is correct.
+
+## 4. Architecture
 
 | Component | Responsibility |
 |---|---|
 | GenerateJUnitAction | Captures selected Java code and the current document snapshot; opens scenario input. |
 | GenerateCommitAction | Tools-menu entry to the commit workflow. |
-| SmartActionPanel | Scenario dialog, repository selector, staged preview, background tasks, cancellation, editable output, copy and test export. |
+| GenerateCommentsAction | Captures the complete selected lines and immutable source snapshot for the comment workflow. |
+| SmartActionPanel | Scenario/language dialogs, repository selector, previews, background tasks, cancellation, copy, test export and undoable comment application. |
 | SmartActions | Builds separate test/commit prompts, invokes LlmClient, validates basic output structure. |
+| CommentGenerator | Builds the comment prompt, validates JSON insertions and lexical positions, constructs the draft and checks source freshness. |
 | GitStagedChanges | Resolves the Git root and reads all staged changes using bounded read-only processes. |
 | TaToolWindowFactory | Registers Course Q&A and F1 Actions tabs; existing Q&A action selects its own tab. |
 | TaProjectService / LlmClient | Reused provider settings, PasswordSafe credentials, HTTP requests and error handling. |
 
 These F1 actions use a fixed Java-controlled flow. They do not use BM25 or model-directed tool calling. Source and diff text are framed as data in the prompts. The IDE thread handles UI work, while Git, HTTP and file export run in the background. Cancelled/obsolete responses cannot update the panel.
 
-## 4. Limits and failure behavior
+## 5. Limits and failure behavior
 
 - Scenario: 6,000 characters; selected Java code: 12,000; complete current file: 60,000; staged diff: 120,000.
 - A request that exceeds a context limit is rejected without sending a partial context. Split large staged batches deliberately, or choose a smaller source file.
@@ -49,13 +65,13 @@ These F1 actions use a fixed Java-controlled flow. They do not use BM25 or model
 - Export uses a new-file-only write. The user selects the destination; no model-generated filesystem path is executed.
 - No project-wide Java dependency analysis, automatic compilation, automatic execution or semantic proof of generated output is performed.
 
-## 5. Validation
+## 6. Validation
 
-38 automated tests passed: the existing 21 F0 tests, 10 F1 prompt/output/HTTP tests, and 7 tests against temporary real Git repositories. Git coverage includes partially staged files, unstaged and untracked exclusions, nested directories, Unicode and spaces in paths, initial commits, deletion/rename/binary changes, empty staging, oversize diffs, and missing Git. The HTTP contract test uses a local fixture server for both actions; its responses are controlled fixtures, not live model output.
+53 automated tests passed: 21 F0 tests, 10 test/commit prompt and HTTP tests, 7 temporary Git repository tests, and 15 comment-generation tests. Comment tests cover source preservation, relative line offsets, stale-source rejection, existing comments, strings/text blocks, invalid insertion data, malicious delimiters/Unicode escapes, context limits and a local HTTP contract. A Java compiler test compiles both the original and annotated sample, then checks matching behavior for positive and negative inputs. These are controlled fixtures, not live model output. Git coverage includes partially staged files, unstaged and untracked exclusions, nested directories, Unicode/space paths, initial commits, deletion/rename/binary changes, empty staging, oversize diffs and missing Git.
 
-The plugin builds successfully for IDEA 2026.1.x. Interactive IDE clicks have not been verified because the Windows Computer Use native pipe is unavailable. A live provider run has not been performed because no provider credential was supplied for testing. Configure your own service and perform the demo steps above before presentation.
+The plugin builds successfully for IDEA 2026.1.x. Interactive clicks and IDE undo have not been verified for 0.3.0; the Computer Use native pipe was unavailable during earlier attempts. A live provider run has not been performed because no provider credential was supplied for testing. Configure your own service and perform the demo steps above before presentation.
 
-The existing English F0 report and presentation PDFs remain baseline documents. This guide records the new features; update the final PDF report and slides after the deferred creative action and team details are settled.
+The English F0 report remains a baseline document. The updated English presentation covers all three F1 features, their workflows, implementation and validation limits. Add actual demo evidence and team details, and update the separate PDF report before submission.
 
 ## References
 

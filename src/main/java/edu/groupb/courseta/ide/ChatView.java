@@ -12,13 +12,13 @@ public final class ChatView extends JPanel {
     final JTextArea codePreview=new JTextArea(3,30);
     final JLabel status=new JLabel("Import course materials to begin");
     final JLabel contextLabel=new JLabel("No selected code");
-    final JButton configure=new JButton("Settings");
-    final JButton index=new JButton("Import / Rebuild");
-    final JButton send=new JButton("Ask TA");
-    final JButton preview=new JButton("Preview retrieval");
-    final JButton cancel=new JButton("Cancel");
-    final JButton clear=new JButton("Clear chat");
-    final JButton detach=new JButton("Clear code");
+    final JButton configure=UiStyle.button("Settings", UiStyle.Tone.NEUTRAL);
+    final JButton index=UiStyle.button("Import / Rebuild", UiStyle.Tone.NEUTRAL);
+    final JButton send=UiStyle.button("Ask TA", UiStyle.Tone.PRIMARY);
+    final JButton preview=UiStyle.button("Preview retrieval", UiStyle.Tone.NEUTRAL);
+    final JButton cancel=UiStyle.button("Cancel", UiStyle.Tone.NEUTRAL);
+    final JButton clear=UiStyle.button("Clear chat", UiStyle.Tone.NEUTRAL);
+    final JButton detach=UiStyle.button("Clear code", UiStyle.Tone.NEUTRAL);
 
     public ChatView() {
         super(new BorderLayout(0,10));
@@ -33,7 +33,7 @@ public final class ChatView extends JPanel {
         transcript.setEditable(false); transcript.setLineWrap(true); transcript.setWrapStyleWord(true);
         transcript.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,14)); transcript.setMargin(new Insets(12,12,12,12));
         transcript.setText("CST3492 Java Enterprise Application Development\n\nAsk about the course or right-click selected code in the editor.\n\nCourse answers include document and page references. Preview retrieval works without an API key.\n\nAsk TA sends your question, attached code and up to four course excerpts to the configured LLM endpoint.\n");
-        add(new JScrollPane(transcript),BorderLayout.CENTER);
+        add(UiStyle.section("Conversation", transcript),BorderLayout.CENTER);
         JPanel compose=new JPanel(new BorderLayout(0,6));
         JPanel context=new JPanel(new BorderLayout()); context.add(contextLabel,BorderLayout.CENTER); context.add(detach,BorderLayout.EAST);
         JPanel entry=new JPanel(new BorderLayout(0,6));
@@ -42,7 +42,7 @@ public final class ChatView extends JPanel {
         entry.add(new JScrollPane(codePreview),BorderLayout.NORTH);
         question.setLineWrap(true); question.setWrapStyleWord(true); question.setMargin(new Insets(8,8,8,8));
         question.setToolTipText("Ask a course question in English or Chinese.");
-        entry.add(new JScrollPane(question),BorderLayout.CENTER);
+        entry.add(UiStyle.section("Your question", question),BorderLayout.CENTER);
         compose.add(context,BorderLayout.NORTH); compose.add(entry,BorderLayout.CENTER);
         JPanel buttons=new JPanel(new FlowLayout(FlowLayout.RIGHT,4,0));
         buttons.add(preview); buttons.add(cancel); buttons.add(send); cancel.setEnabled(false);

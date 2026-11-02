@@ -1,5 +1,5 @@
 package edu.groupb.courseta.ide;
-//TApanel
+//TaPanel
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileChooser.*;

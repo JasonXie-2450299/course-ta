@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="edu.groupb.courseta.core.CommentGeneratorTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-11-01T09:05:27.668Z" hostname="SURFACE-LAPTOP7" time="1.664">
+  <properties/>
+  <testcase name="staleDocumentIsRejectedIncludingEditsOutsideSelection()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.186"/>
+  <testcase name="httpGenerationSendsSelectionAndLanguageThenBuildsDraftLocally()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.494"/>
+  <testcase name="insertsJavadocAndBlockCommentsWhilePreservingEveryOriginalCharacter()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.008"/>
+  <testcase name="subsetUsesRelativeLinesAndPreservesCodeOutsideSelection()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.011"/>
+  <testcase name="existingCommentsAreKeptAndInsertingInsideThemIsRejected()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.013"/>
+  <testcase name="rejectsCommentBreakoutUnicodeAndControlCharacters()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.01"/>
+  <testcase name="commentLikeTextInStringsAndEscapedCharactersDoesNotConfuseBoundaryChecks()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.01"/>
+  <testcase name="commentsCannotBeInsertedInsideTextBlocks()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.009"/>
+  <testcase name="acceptsJsonFenceWithoutAddingItToSource()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.008"/>
+  <testcase name="contextAndResponseLimitsRejectOversizeInsteadOfTruncating()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.009"/>
+  <testcase name="partialLinesUnicodeEscapesAndBlankSelectionsAreRejected()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.005"/>
+  <testcase name="promptContainsNumberedSelectionContextAndLanguage()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.006"/>
+  <testcase name="generatedCommentsCompileAndKeepObservedBehavior()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.81"/>
+  <testcase name="validatesLineNumbersKindsAndDuplicateInsertions()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.009"/>
+  <testcase name="rejectsRewrittenCodeInvalidJsonAndMissingComments()" classname="edu.groupb.courseta.core.CommentGeneratorTest" time="0.009"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

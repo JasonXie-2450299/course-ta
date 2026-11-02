@@ -2,12 +2,15 @@
     <id>edu.groupb.course-ta</id>
     <name>Course TA</name>
     <vendor>Group B</vendor>
-    <description><![CDATA[Course-specific Java teaching assistant with local RAG, citations, scenario-based JUnit generation and staged Git commit messages. Creative action deferred.]]></description>
+    <description><![CDATA[Course-specific Java teaching assistant with local RAG, citations, scenario-based JUnit generation, staged Git commit messages and selected-code comment generation.]]></description>
     <depends>com.intellij.modules.platform</depends>
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Course TA" anchor="right" factoryClass="edu.groupb.courseta.ide.TaToolWindowFactory" icon="/icons/courseTa.svg"/>
     </extensions>
     <actions>
+        <action id="CourseTA.GenerateComments" class="edu.groupb.courseta.ide.GenerateCommentsAction" text="Generate Comments with Course TA" description="Generate comments for selected Java code, then review and apply">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
         <action id="CourseTA.GenerateJUnit" class="edu.groupb.courseta.ide.GenerateJUnitAction" text="Generate JUnit Tests with Course TA" description="Describe a scenario and generate JUnit 5 tests for the selected Java code">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="edu.groupb.courseta.core.SmartActionsTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-01T08:08:12.358Z" hostname="SURFACE-LAPTOP7" time="0.096">
+<testsuite name="edu.groupb.courseta.core.SmartActionsTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-01T09:05:37.585Z" hostname="SURFACE-LAPTOP7" time="0.047">
   <properties/>
-  <testcase name="blankScenarioAndSelectionAreRejectedBeforeModelCall()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.003"/>
-  <testcase name="oversizeJavaInputIsRejectedWithoutTruncatingContext()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.006"/>
-  <testcase name="testPromptIncludesScenarioSelectionAndFullUnsavedSource()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.008"/>
+  <testcase name="blankScenarioAndSelectionAreRejectedBeforeModelCall()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.001"/>
+  <testcase name="oversizeJavaInputIsRejectedWithoutTruncatingContext()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.003"/>
+  <testcase name="testPromptIncludesScenarioSelectionAndFullUnsavedSource()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.003"/>
   <testcase name="emptyOrOversizedDiffIsRejected()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.002"/>
-  <testcase name="acceptsJavaSourceAndRemovesOnlyOuterFence()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.004"/>
-  <testcase name="bothActionsUseConfiguredHttpServiceAndSendCorrectContexts()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.05"/>
-  <testcase name="commitPromptPreservesEveryFileAndTellsModelNotToInventTests()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.001"/>
+  <testcase name="acceptsJavaSourceAndRemovesOnlyOuterFence()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.002"/>
+  <testcase name="bothActionsUseConfiguredHttpServiceAndSendCorrectContexts()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.021"/>
+  <testcase name="commitPromptPreservesEveryFileAndTellsModelNotToInventTests()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.0"/>
   <testcase name="rejectsExplanationOrMissingJunitClass()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.003"/>
-  <testcase name="rejectsNonConventionalModelResponse()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.001"/>
-  <testcase name="conventionalCommitSupportsScopeBodyAndBreakingChange()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.002"/>
+  <testcase name="rejectsNonConventionalModelResponse()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.003"/>
+  <testcase name="conventionalCommitSupportsScopeBodyAndBreakingChange()" classname="edu.groupb.courseta.core.SmartActionsTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

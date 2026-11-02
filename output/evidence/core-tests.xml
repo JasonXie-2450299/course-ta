@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="edu.groupb.courseta.core.CoreTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2026-11-01T08:08:00.531Z" hostname="SURFACE-LAPTOP7" time="2.924">
+<testsuite name="edu.groupb.courseta.core.CoreTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2026-11-01T09:05:29.336Z" hostname="SURFACE-LAPTOP7" time="0.995">
   <properties/>
-  <testcase name="selectedMarkdownImportsWithLineReferences()" classname="edu.groupb.courseta.core.CoreTest" time="0.221"/>
-  <testcase name="chineseTopicAliasFindsEnglishMaterial()" classname="edu.groupb.courseta.core.CoreTest" time="0.055"/>
-  <testcase name="cancelledImportDoesNotReturnPartialResult()" classname="edu.groupb.courseta.core.CoreTest" time="0.02"/>
-  <testcase name="httpFailuresDoNotLeakProviderBody()" classname="edu.groupb.courseta.core.CoreTest" time="1.055"/>
-  <testcase name="chunksNeverExceedBudgetOrLoseTail()" classname="edu.groupb.courseta.core.CoreTest" time="0.013"/>
-  <testcase name="insecureRemoteEndpointsAreRejected()" classname="edu.groupb.courseta.core.CoreTest" time="0.017"/>
-  <testcase name="previewDoesNotPretendToBeLlmAnswer()" classname="edu.groupb.courseta.core.CoreTest" time="0.025"/>
-  <testcase name="oversizedInputRejected()" classname="edu.groupb.courseta.core.CoreTest" time="0.021"/>
-  <testcase name="retrievalRanksRelevantPage()" classname="edu.groupb.courseta.core.CoreTest" time="0.019"/>
-  <testcase name="validCitationsResolveToDocumentAndPage()" classname="edu.groupb.courseta.core.CoreTest" time="0.018"/>
-  <testcase name="pdfExtractionPreservesEveryPage()" classname="edu.groupb.courseta.core.CoreTest" time="1.05"/>
-  <testcase name="utf8TextUsesLineScopeAndReportsCorruptPdf()" classname="edu.groupb.courseta.core.CoreTest" time="0.019"/>
-  <testcase name="indexSurvivesRoundTrip()" classname="edu.groupb.courseta.core.CoreTest" time="0.062"/>
-  <testcase name="corruptIndexRaisesActionableError()" classname="edu.groupb.courseta.core.CoreTest" time="0.016"/>
+  <testcase name="selectedMarkdownImportsWithLineReferences()" classname="edu.groupb.courseta.core.CoreTest" time="0.017"/>
+  <testcase name="chineseTopicAliasFindsEnglishMaterial()" classname="edu.groupb.courseta.core.CoreTest" time="0.024"/>
+  <testcase name="cancelledImportDoesNotReturnPartialResult()" classname="edu.groupb.courseta.core.CoreTest" time="0.009"/>
+  <testcase name="httpFailuresDoNotLeakProviderBody()" classname="edu.groupb.courseta.core.CoreTest" time="0.016"/>
+  <testcase name="chunksNeverExceedBudgetOrLoseTail()" classname="edu.groupb.courseta.core.CoreTest" time="0.011"/>
+  <testcase name="insecureRemoteEndpointsAreRejected()" classname="edu.groupb.courseta.core.CoreTest" time="0.006"/>
+  <testcase name="previewDoesNotPretendToBeLlmAnswer()" classname="edu.groupb.courseta.core.CoreTest" time="0.015"/>
+  <testcase name="oversizedInputRejected()" classname="edu.groupb.courseta.core.CoreTest" time="0.009"/>
+  <testcase name="retrievalRanksRelevantPage()" classname="edu.groupb.courseta.core.CoreTest" time="0.007"/>
+  <testcase name="validCitationsResolveToDocumentAndPage()" classname="edu.groupb.courseta.core.CoreTest" time="0.008"/>
+  <testcase name="pdfExtractionPreservesEveryPage()" classname="edu.groupb.courseta.core.CoreTest" time="0.645"/>
+  <testcase name="utf8TextUsesLineScopeAndReportsCorruptPdf()" classname="edu.groupb.courseta.core.CoreTest" time="0.017"/>
+  <testcase name="indexSurvivesRoundTrip()" classname="edu.groupb.courseta.core.CoreTest" time="0.033"/>
+  <testcase name="corruptIndexRaisesActionableError()" classname="edu.groupb.courseta.core.CoreTest" time="0.019"/>
   <testcase name="promptIncludesCodeAndBoundedEvidence()" classname="edu.groupb.courseta.core.CoreTest" time="0.013"/>
-  <testcase name="emptyEvidenceAlwaysHasGeneralKnowledgeNotice()" classname="edu.groupb.courseta.core.CoreTest" time="0.009"/>
-  <testcase name="selectedPdfImportsOnlyThatFileAndPreservesPageReferences()" classname="edu.groupb.courseta.core.CoreTest" time="0.039"/>
-  <testcase name="selectedUnsupportedFileExplainsAcceptedFormats()" classname="edu.groupb.courseta.core.CoreTest" time="0.012"/>
-  <testcase name="unrelatedQuestionReturnsNoEvidence()" classname="edu.groupb.courseta.core.CoreTest" time="0.016"/>
-  <testcase name="httpIntegrationSendsGroundedPromptAndParsesResponse()" classname="edu.groupb.courseta.core.CoreTest" time="0.125"/>
-  <testcase name="invalidAndMissingCitationsWithholdAnswer()" classname="edu.groupb.courseta.core.CoreTest" time="0.007"/>
+  <testcase name="emptyEvidenceAlwaysHasGeneralKnowledgeNotice()" classname="edu.groupb.courseta.core.CoreTest" time="0.013"/>
+  <testcase name="selectedPdfImportsOnlyThatFileAndPreservesPageReferences()" classname="edu.groupb.courseta.core.CoreTest" time="0.028"/>
+  <testcase name="selectedUnsupportedFileExplainsAcceptedFormats()" classname="edu.groupb.courseta.core.CoreTest" time="0.011"/>
+  <testcase name="unrelatedQuestionReturnsNoEvidence()" classname="edu.groupb.courseta.core.CoreTest" time="0.017"/>
+  <testcase name="httpIntegrationSendsGroundedPromptAndParsesResponse()" classname="edu.groupb.courseta.core.CoreTest" time="0.038"/>
+  <testcase name="invalidAndMissingCitationsWithholdAnswer()" classname="edu.groupb.courseta.core.CoreTest" time="0.015"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

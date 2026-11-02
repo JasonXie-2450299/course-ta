@@ -1,6 +1,6 @@
 # Course TA for CST3492
 
-IntelliJ IDEA teaching assistant for Assignment A, Group B. Release **0.2.0** implements **F0** plus the two requested **F1** actions: scenario-based JUnit generation and staged Git commit messages. The creative action is deferred at the user's request, so the full F1 assignment is not yet complete.
+IntelliJ IDEA teaching assistant for Assignment A, Group B. Release **0.3.0** implements **F0** and all three **F1** actions: scenario-based JUnit generation, staged Git commit messages, and selected-code comment generation as the creative action.
 
 ## Features
 
@@ -13,6 +13,7 @@ IntelliJ IDEA teaching assistant for Assignment A, Group B. Release **0.2.0** im
 - JUnit 5 test generation from a required natural-language scenario, selected Java code and its current file context.
 - Complete staged-diff preview and Conventional Commit message generation, including repositories without a first commit.
 - Editable result preview, copy, and save-as for new test files; no automatic staging or committing.
+- Chinese/English comments for selected Java lines, with validated comment-only insertions, preview, explicit apply and IDE undo support.
 
 ## Build and run
 
@@ -36,7 +37,7 @@ Portable Gradle commands (without a local SDK, Gradle downloads IDEA 2026.1.1):
 ./gradlew runIde
 ```
 
-Install `build/distributions/course-ta-0.2.0.zip` via **Settings > Plugins > gear > Install Plugin from Disk**, then restart when prompted. Open a local project and choose **View > Tool Windows > Course TA**. Compatibility is deliberately limited to IDEA build `261.*`, the target used for this release.
+Install `build/distributions/course-ta-0.3.0.zip` via **Settings > Plugins > gear > Install Plugin from Disk**, then restart when prompted. Open a local project and choose **View > Tool Windows > Course TA**. Compatibility is deliberately limited to IDEA build `261.*`, the target used for this release.
 
 ## Use the assistant
 
@@ -51,7 +52,7 @@ Try `What is polymorphism?`, `How do checked exceptions work?`, `What is retriev
 
 ## F1 actions
 
-Configure your model in **Course TA > Course Q&A > Settings**; both F1 actions reuse these settings and PasswordSafe credentials. They do not require a course index.
+Configure your model in **Course TA > Course Q&A > Settings**; all F1 actions reuse these settings and PasswordSafe credentials. They do not require a course index.
 
 **JUnit:** Select a class or method in a `.java` editor, right-click **Generate JUnit Tests with Course TA**, enter a scenario such as “when the ID is null or blank, readUser must throw IOException”, and click **Generate**. The current unsaved file is included to supply the package, imports and declaring class. Review/edit the draft in **F1 Actions**, then **Copy result** or **Save test as...** into your project's test source directory. Existing files are never overwritten. Tests target JUnit Jupiter 5; add that dependency if needed, then compile and run the generated class yourself. The plugin does not automatically execute generated code.
 
@@ -59,13 +60,17 @@ Configure your model in **Course TA > Course Q&A > Settings**; both F1 actions r
 
 Git must be available as `git` on the IDE process's PATH. No Git plugin configuration is required. Requests are bounded to 6,000 scenario characters, 12,000 selected-code characters, a 60,000-character current Java file, and a 120,000-character staged diff. Oversize input is rejected as a whole, never silently truncated. Git commands time out after 30 seconds; model requests use the existing HTTP client timeouts. Binary diffs are included but semantic content may not be inferable from their metadata. Model output checks cover structure only; compilation and correctness need review.
 
+**Comments (creative action):** Select Java code and right-click **Generate Comments with Course TA**, or click **Comments from selection** in F1 Actions. Choose Chinese (default) or English and click Generate. The selection expands to complete physical lines to avoid splitting Java tokens. Review the read-only commented-code preview, then **Copy result** or **Apply comments**. Applying uses a named IntelliJ write command and can be undone in the source editor. If any part of the source changed after generation, regenerate before applying.
+
+The model returns JSON insertions (relative line, block/Javadoc kind, comment text), not rewritten code. The plugin validates locations against the full file's lexical state and constructs the result using original source text. It rejects insertions inside strings, text blocks or existing block comments, comment terminators and Java Unicode escapes. Files containing Java Unicode escape sequences are conservatively rejected by this action; ordinary Chinese characters are supported. No source change occurs during generation. Comments are limited to 40 insertions of 1,500 characters each. Comment accuracy still needs review.
+
 The complete F1 implementation and demo guide is in `output/documents/F1_Implementation_Guide.md`.
 
 ## Project layout
 
 | Path | Purpose |
 |---|---|
-| `core/src/main/java` | Ingestion, BM25, persistence, RAG, HTTP, F1 prompts and read-only staged Git diff collection |
+| `core/src/main/java` | Ingestion, BM25, persistence, RAG, HTTP, F1 prompts, staged Git diff collection and validated comment insertions |
 | `src/main/java` | IDEA services, Q&A and F1 tabs, settings and editor/menu actions |
 | `src/main/resources/META-INF/plugin.xml` | Plugin registration |
 | `core/src/test/java` | Automated tests and full-corpus audit |
@@ -86,7 +91,7 @@ Unit and local HTTP contract tests do not establish the quality of a live provid
 
 ## Group B completion
 
-The two requested F1 actions are implemented. The creative action is deliberately deferred. Before final Group B submission, complete that remaining action, update the final report/slides, and fill in team names, matriculation numbers and contact details. The existing F0 PDFs describe the baseline; the F1 Markdown guide documents this release.
+All three F1 actions are implemented. The 17-slide `output/documents/GroupB_F0_F1_Presentation.pptx` and matching PDF include all F1 features, workflows, implementation and validation results. Before final Group B submission, validate with your live model, update the separate F0 report, and fill in team names, matriculation numbers and contact details. The F1 Markdown guide documents this release and its validation limits.
 
 ## References
 

@@ -16,25 +16,30 @@ plugin=root/f'build/distributions/course-ta-{version}.zip'
 shutil.copy2(plugin,out/'plugin'/plugin.name)
 shutil.copy2(root/'build/audit/course-audit.json',out/'evidence/course-audit.json')
 test_count=0
-for suite, filename in (('CoreTest','core-tests.xml'),('SmartActionsTest','f1-actions-tests.xml'),('GitStagedChangesTest','f1-git-tests.xml')):
+for suite, filename in (('CoreTest','core-tests.xml'),('SmartActionsTest','f1-actions-tests.xml'),('GitStagedChangesTest','f1-git-tests.xml'),('CommentGeneratorTest','f1-comments-tests.xml')):
     test_file=root/f'core/build/test-results/test/TEST-edu.groupb.courseta.core.{suite}.xml'
     test=ET.parse(test_file).getroot()
     assert all(test.attrib[key]=='0' for key in ('failures','errors','skipped'))
     test_count+=int(test.attrib['tests'])
     shutil.copy2(test_file,out/'evidence'/filename)
-assert test_count>=38
+assert test_count>=53
 assert len(PdfReader(out/'documents/GroupB_F0_Report.pdf').pages)==10
-assert len(PdfReader(out/'documents/GroupB_F0_Presentation.pdf').pages)==9
+presentation_pages=len(PdfReader(out/'documents/GroupB_F0_F1_Presentation.pdf').pages)
+assert presentation_pages==17
+with zipfile.ZipFile(out/'documents/GroupB_F0_F1_Presentation.pptx') as slides:
+    assert slides.testzip() is None
+    assert len([p for p in slides.namelist() if re.fullmatch(r'ppt/slides/slide\d+\.xml',p)])==presentation_pages
 with zipfile.ZipFile(plugin) as z:
     assert z.testzip() is None
     assert f'course-ta/lib/course-ta-{version}.jar' in z.namelist()
 validation={
-    'release':version,'scope':'F0 + F1 JUnit and staged commit actions; creative action deferred by user','date':'2026-11-01','ideTarget':'IntelliJ IDEA 2026.1.1 / 261.*',
-    'buildPlugin':'passed','coreTests':test_count,'testFailures':0,'reportPages':10,'presentationSlides':9,
-    'idePluginDiscovery':'0.1.0 previously discovered in sandbox; not re-run for 0.2.0',
-    'interactiveIdeTest':'not run; Computer Use native pipe unavailable (os error 2)',
-    'f1Validation':'10 prompt/output/local HTTP tests and 7 tests with real temporary Git repositories passed',
-    'documentBaseline':'PDF report and slides describe F0 0.1.0; see F0_0.1.1_Changes.md and F1_Implementation_Guide.md for updates',
+    'release':version,'scope':'F0 + all F1 actions; creative action is selected-code comment generation','date':'2026-11-02','ideTarget':'IntelliJ IDEA 2026.1.1 / 261.*',
+    'buildPlugin':'passed','coreTests':test_count,'testFailures':0,'reportPages':10,'presentationSlides':presentation_pages,
+    'idePluginDiscovery':'0.1.0 previously discovered in sandbox; not re-run for 0.3.0',
+    'interactiveIdeTest':'not run for 0.3.0; Computer Use native pipe unavailable in earlier attempts',
+    'f1Validation':'10 prompt/output/local HTTP tests, 7 real temporary Git tests and 15 comment insertion tests passed',
+    'commentValidation':'Source preservation, stale drafts, strings/text blocks, unsafe insertions, local HTTP, original/annotated sample compilation and behavior',
+    'documentBaseline':'PDF report remains F0 0.1.0; presentation now covers F0 + all F1 actions in 0.3.0. See F1_Implementation_Guide.md for details.',
     'liveLlmTest':'not run; no real provider credential supplied',
     'gradleConfigurationAdvisory':'until-build intentionally restricts this release to the target 261.* series',
     'uiSamples':'production Swing component rendered offscreen',
@@ -46,7 +51,7 @@ for folder in ('documents','plugin','evidence'):
     for file in sorted((out/folder).glob('*')):
         if file.is_file() and (folder!='plugin' or file.name==plugin.name): records.append(f'{hashlib.sha256(file.read_bytes()).hexdigest()}  {file.relative_to(out).as_posix()}')
 (out/'SHA256SUMS.txt').write_text('\n'.join(records)+'\n',encoding='utf-8')
-target=out/'GroupB_F0_F1_Partial_Delivery.zip'
+target=out/f'GroupB_F0_F1_{version}.zip'
 with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED) as z:
     for name in ('.gitignore','README.md','build.gradle.kts','settings.gradle.kts','gradle.properties','gradlew','gradlew.bat','core/build.gradle.kts'):
         z.write(root/name,'source/'+name)
